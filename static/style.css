@@ -1,0 +1,114 @@
+/* E.Y.L FM — стиль старого ASK.fm (2013): синяя шапка, белый фон, компактно */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; color: #333; background: #fff; line-height: 1.45; }
+a { color: #2e6da4; text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; }
+
+/* --- верхняя синяя панель --- */
+.topbar { background: #2e6da4; height: 50px; }
+.topbar-in { width: 940px; max-width: 100%; margin: 0 auto; display: flex; align-items: center; height: 50px; padding: 0 10px; }
+.logo { color: #fff; font-size: 26px; font-weight: bold; letter-spacing: -1px; white-space: nowrap; }
+.logo:hover { text-decoration: none; }
+.logo-fm { background: #fff; color: #2e6da4; font-size: 13px; padding: 2px 6px; border-radius: 3px; vertical-align: middle; margin-left: 4px; letter-spacing: 0; }
+.topnav { margin-left: 25px; display: flex; gap: 2px; flex-wrap: wrap; }
+.topnav a { color: #dcebf7; font-size: 13px; padding: 6px 9px; border-radius: 3px; }
+.topnav a:hover, .topnav a.active { background: #245a8a; color: #fff; text-decoration: none; }
+.badge { background: #e74c3c; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 8px; vertical-align: super; }
+.topuser { margin-left: auto; color: #dcebf7; font-size: 13px; white-space: nowrap; }
+.topuser a { color: #fff; font-weight: bold; }
+
+/* --- компоновка --- */
+.wrap { width: 940px; max-width: 100%; margin: 0 auto; padding: 15px 10px 30px; display: flex; gap: 20px; align-items: flex-start; }
+.main { flex: 1; min-width: 0; }
+.side { width: 300px; flex-shrink: 0; }
+.card { border: 1px solid #ddd; background: #fff; padding: 12px; margin-bottom: 12px; }
+.card h2 { font-size: 15px; color: #2e6da4; margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 6px; }
+.card h3 { font-size: 13px; margin-bottom: 6px; }
+.muted { color: #888; font-size: 12px; }
+.hr { border-top: 1px solid #eee; margin: 10px 0; }
+
+/* --- формы и кнопки --- */
+input[type=text], input[type=password], textarea, select { width: 100%; border: 1px solid #ccc; padding: 7px 8px; font-size: 13px; font-family: inherit; border-radius: 2px; }
+textarea { resize: vertical; min-height: 60px; }
+label { display: block; font-weight: bold; margin: 8px 0 3px; font-size: 12px; color: #555; }
+.btn { display: inline-block; background: #2e6da4; color: #fff; border: none; padding: 7px 16px; font-size: 13px; cursor: pointer; border-radius: 3px; font-family: inherit; }
+.btn:hover { background: #245a8a; text-decoration: none; color: #fff; }
+.btn-gray { background: #eee; color: #333; border: 1px solid #ccc; }
+.btn-gray:hover { background: #e0e0e0; color: #333; }
+.btn-danger { background: #c0392b; }
+.btn-danger:hover { background: #a93226; }
+.btn-small { padding: 4px 10px; font-size: 12px; }
+.check { font-weight: normal; display: inline; }
+.flash { padding: 8px 10px; margin-bottom: 12px; border: 1px solid; border-radius: 3px; font-size: 13px; }
+.flash.ok { background: #eaf7ea; border-color: #b7dfb7; color: #2e7d32; }
+.flash.err { background: #fdecea; border-color: #f5c6c6; color: #c0392b; }
+
+/* --- профиль --- */
+.profile-head { display: flex; gap: 15px; }
+.avatar-big { width: 120px; height: 120px; border: 1px solid #ddd; border-radius: 3px; object-fit: cover; background: #f2f2f2; }
+.avatar-ph { width: 120px; height: 120px; border: 1px solid #ddd; border-radius: 3px; background: #2e6da4; color: #fff; font-size: 56px; font-weight: bold; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.avatar-sm { width: 40px; height: 40px; border-radius: 3px; object-fit: cover; border: 1px solid #ddd; }
+.avatar-ph-sm { width: 40px; height: 40px; border-radius: 3px; background: #2e6da4; color: #fff; font-size: 20px; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; }
+.profile-name { font-size: 20px; font-weight: bold; }
+.profile-nick { color: #888; font-size: 13px; }
+.profile-bio { margin: 6px 0; }
+.stats { display: flex; gap: 18px; margin: 10px 0; font-size: 13px; }
+.stats b { font-size: 15px; }
+.tabs { border-bottom: 1px solid #ddd; margin-bottom: 12px; display: flex; gap: 2px; }
+.tabs a { padding: 7px 12px; color: #555; border: 1px solid transparent; border-bottom: none; border-radius: 3px 3px 0 0; }
+.tabs a.active { color: #2e6da4; font-weight: bold; border-color: #ddd; background: #fff; margin-bottom: -1px; }
+.ask-box { background: #f7f9fb; border: 1px solid #ddd; padding: 10px; margin-bottom: 12px; }
+.ask-box textarea { margin-bottom: 6px; }
+
+/* --- лента ответов --- */
+.answer { border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; background: #fff; }
+.answer .q { font-weight: bold; font-size: 14px; color: #222; margin-bottom: 4px; }
+.answer .q .who { color: #888; font-weight: normal; font-size: 12px; }
+.answer .a { margin: 6px 0; white-space: pre-wrap; word-wrap: break-word; }
+.answer .meta { color: #888; font-size: 12px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.like-btn { border: none; background: none; color: #888; cursor: pointer; font-size: 13px; padding: 0; font-family: inherit; }
+.like-btn.liked { color: #e74c3c; }
+.like-btn:hover { text-decoration: underline; }
+.qitem { border: 1px solid #ddd; padding: 10px 12px; margin-bottom: 10px; }
+.qitem .qtext { font-weight: bold; margin-bottom: 8px; }
+
+/* --- списки людей --- */
+.person { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
+.person:last-child { border-bottom: none; }
+.person .nm { font-weight: bold; }
+.person .sub { color: #888; font-size: 12px; }
+
+/* --- подарки --- */
+.gift-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.gift { width: 100px; border: 1px solid #ddd; padding: 10px 6px; text-align: center; border-radius: 3px; cursor: pointer; background: #fff; }
+.gift:hover { border-color: #2e6da4; }
+.gift .em { font-size: 34px; line-height: 1.2; }
+.gift .gn { font-weight: bold; font-size: 12px; margin-top: 4px; }
+.gift .gd { color: #888; font-size: 11px; }
+.gift-sel { border-color: #2e6da4; background: #eaf2f8; }
+
+/* --- уведомления --- */
+.notif { padding: 8px 0; border-bottom: 1px solid #eee; }
+.notif.unread { font-weight: bold; }
+.notif .t { color: #888; font-size: 12px; font-weight: normal; }
+
+/* --- прочее --- */
+.hero { text-align: center; padding: 25px 10px; }
+.hero h1 { font-size: 26px; color: #2e6da4; margin-bottom: 8px; }
+.hero p { color: #555; font-size: 14px; }
+.footer { text-align: center; color: #aaa; font-size: 12px; padding: 20px 0; border-top: 1px solid #eee; margin-top: 10px; }
+.two-col { display: flex; gap: 20px; }
+.two-col > div { flex: 1; }
+
+@media (max-width: 720px) {
+  .wrap { flex-direction: column; }
+  .side { width: 100%; }
+  .topbar { height: auto; }
+  .topbar-in { flex-wrap: wrap; height: auto; padding: 8px 10px; }
+  .topnav { margin-left: 0; order: 3; width: 100%; }
+  .topuser { margin-left: auto; }
+  .profile-head { flex-direction: column; }
+  .avatar-big, .avatar-ph { width: 90px; height: 90px; font-size: 40px; }
+  .two-col { flex-direction: column; }
+}

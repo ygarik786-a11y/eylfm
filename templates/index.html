@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not me %}
+<div class="card hero">
+  <h1>E.Y.L FM — задай вопрос!</h1>
+  <p>Соцсеть вопросов и ответов в духе старого доброго ASK.fm.<br>Регистрируйся, спрашивай друзей и отвечай на вопросы.</p>
+  <div class="hr"></div>
+  <a class="btn" href="{{ url_for('register') }}">Зарегистрироваться бесплатно</a>
+</div>
+{% endif %}
+<h2 style="font-size:15px;color:#2e6da4;margin-bottom:10px;">{{ page_title or 'Лента ответов' }}</h2>
+{% for a in feed %}
+<div class="answer">
+  <div class="q">{{ a.text }}
+    <span class="who">— вопрос для <a href="{{ url_for('profile', username=a.username) }}">{{ a.name }}</a></span>
+  </div>
+  <div class="a">{{ a.answer }}</div>
+  <div class="meta">
+    <span>{{ a.answered_at|timeago }}</span>
+    <form method="post" action="{{ url_for('like', qid=a.id) }}" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="like-btn {% if a.id in liked %}liked{% endif %}" type="submit">♥ Нравится</button>
+    </form>
+    {% if me and a.to_id == me.id %}
+    <form method="post" action="{{ url_for('delete_q', qid=a.id) }}" style="display:inline" onsubmit="return confirm('Удалить этот ответ?')">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="like-btn" type="submit">Удалить</button>
+    </form>
+    {% endif %}
+    <a href="{{ url_for('profile', username=a.username) }}">Все ответы {{ a.name }}</a>
+  </div>
+</div>
+{% else %}
+<div class="card"><p class="muted">Пока пусто. {% if me %}Подпишитесь на друзей — и их ответы появятся здесь.{% else %}Зарегистрируйтесь и задайте первый вопрос!{% endif %}</p></div>
+{% endfor %}
+{% endblock %}

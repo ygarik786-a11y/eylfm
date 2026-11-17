@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="font-size:15px;color:#2e6da4;margin-bottom:10px;">Поиск пользователей</h2>
+<div class="card">
+  <form method="get" action="{{ url_for('search') }}">
+    <input type="text" name="q" value="{{ q }}" placeholder="Имя или ник..." maxlength="50">
+    <div style="margin-top:8px"><button class="btn" type="submit">Найти</button></div>
+  </form>
+</div>
+{% if q %}
+<div class="card">
+{% for u in users %}
+<div class="person">
+  {% if u.avatar %}<img class="avatar-sm" src="{{ url_for('avatar_file', fn=u.avatar) }}">{% else %}<span class="avatar-ph-sm">{{ u.name[0] }}</span>{% endif %}
+  <div style="flex:1">
+    <div class="nm"><a href="{{ url_for('profile', username=u.username) }}">{{ u.name }}</a></div>
+    <div class="sub">@{{ u.username }}{% if u.city %} · {{ u.city }}{% endif %}</div>
+  </div>
+  <a class="btn btn-small" href="{{ url_for('profile', username=u.username) }}">Профиль</a>
+</div>
+{% else %}
+<p class="muted">По запросу «{{ q }}» никого не найдено.</p>
+{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

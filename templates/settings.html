@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:480px">
+  <h2>Настройки</h2>
+  <p class="muted">Вы вошли как <b>{{ me.name }}</b> (@{{ me.username }}). Первый зарегистрированный пользователь — администратор сайта.</p>
+  <div class="hr"></div>
+  <h3>Сменить пароль</h3>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Старый пароль</label>
+    <input type="password" name="old_password" required>
+    <label>Новый пароль</label>
+    <input type="password" name="new_password" required minlength="4">
+    <label>Новый пароль ещё раз</label>
+    <input type="password" name="new_password2" required minlength="4">
+    <div style="margin-top:12px"><button class="btn" type="submit">Сохранить пароль</button></div>
+  </form>
+  <div class="hr"></div>
+  <a class="btn btn-gray" href="{{ url_for('edit_profile') }}">Редактировать профиль</a>
+  <a class="btn btn-gray" href="{{ url_for('my_page') }}">Моя страница</a>
+</div>
+{% endblock %}

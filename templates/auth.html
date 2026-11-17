@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:420px;margin:0 auto">
+  {% if mode == 'register' %}
+  <h2>Регистрация в E.Y.L FM</h2>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Ник (латиница, цифры, _)</label>
+    <input type="text" name="username" required maxlength="20" placeholder="например, erik">
+    <label>Имя</label>
+    <input type="text" name="name" required maxlength="50" placeholder="Ерик Лебедь">
+    <label>Пароль</label>
+    <input type="password" name="password" required minlength="4">
+    <label>Пароль ещё раз</label>
+    <input type="password" name="password2" required minlength="4">
+    <div style="margin-top:12px"><button class="btn" type="submit">Зарегистрироваться</button></div>
+  </form>
+  <div class="hr"></div>
+  <p class="muted">Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+  {% else %}
+  <h2>Вход в E.Y.L FM</h2>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Ник</label>
+    <input type="text" name="username" required>
+    <label>Пароль</label>
+    <input type="password" name="password" required>
+    <div style="margin-top:12px"><button class="btn" type="submit">Войти</button></div>
+  </form>
+  <div class="hr"></div>
+  <p class="muted">Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+  {% endif %}
+</div>
+{% endblock %}

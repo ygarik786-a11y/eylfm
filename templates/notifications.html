@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="font-size:15px;color:#2e6da4;margin-bottom:10px;">Уведомления</h2>
+<div class="card">
+{% for n in rows %}
+<div class="notif {% if not n.is_read %}unread{% endif %}">
+  {% if n.link %}<a href="{{ n.link }}">{{ n.text }}</a>{% else %}{{ n.text }}{% endif %}
+  <div class="t">{{ n.created_at|timeago }}</div>
+</div>
+{% else %}
+<p class="muted">Уведомлений нет.</p>
+{% endfor %}
+</div>
+{% endblock %}

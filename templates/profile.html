@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div class="profile-head">
+    {% if u.avatar %}<img class="avatar-big" src="{{ url_for('avatar_file', fn=u.avatar) }}">{% else %}<div class="avatar-ph">{{ u.name[0] }}</div>{% endif %}
+    <div style="flex:1;min-width:0">
+      <div class="profile-name">{{ u.name }}</div>
+      <div class="profile-nick">@{{ u.username }}{% if u.city %} · {{ u.city }}{% endif %}</div>
+      {% if u.bio %}<div class="profile-bio">{{ u.bio }}</div>{% endif %}
+      <div class="stats">
+        <span><b>{{ stats.answers }}</b> ответов</span>
+        <span><b>{{ stats.likes }}</b> лайков</span>
+        <span><b>{{ stats.followers }}</b> подписчиков</span>
+        <span><b>{{ stats.following }}</b> подписок</span>
+      </div>
+      {% if me and me.id != u.id %}
+      <form method="post" action="{{ url_for('follow', username=u.username) }}" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn" type="submit">{{ 'Отписаться' if is_following else 'Подписаться' }}</button>
+      </form>
+      {% elif me %}
+      <a class="btn btn-gray" href="{{ url_for('edit_profile') }}">Редактировать профиль</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% if not me or me.id != u.id %}
+<div class="ask-box">
+  <h3>Задать вопрос {{ u.name }}</h3>
+  <form method="post" action="{{ url_for('ask') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="to" value="{{ u.username }}">
+    <textarea name="text" maxlength="300" placeholder="Напишите вопрос..." required></textarea>
+    <label class="check"><input type="checkbox" name="anon" value="1"> Задать анонимно</label>
+    <div style="margin-top:8px"><button class="btn" type="submit">Задать вопрос</button></div>
+  </form>
+</div>
+{% endif %}
+
+<div class="tabs">
+  <a href="{{ url_for('profile', username=u.username, tab='answers') }}" class="{{ 'active' if tab=='answers' else '' }}">Ответы ({{ stats.answers }})</a>
+  <a href="{{ url_for('profile', username=u.username, tab='gifts') }}" class="{{ 'active' if tab=='gifts' else '' }}">Подарки ({{ my_gifts|length }})</a>
+</div>
+
+{% if tab == 'gifts' %}
+  {% for g in my_gifts %}
+  <div class="qitem"><span style="font-size:28px">{{ g.emoji }}</span> <b>{{ g.gname }}</b> — от <a href="{{ url_for('profile', username=g.from_username) }}">{{ g.from_name }}</a>
+    {% if g.message %}<div>«{{ g.message }}»</div>{% endif %}
+    <div class="muted">{{ g.created_at|timeago }}</div></div>
+  {% else %}
+  <div class="card"><p class="muted">Подарков пока нет. Подарите первый!</p></div>
+  {% endfor %}
+{% else %}
+  {% for a in answers %}
+  <div class="answer">
+    <div class="q">{{ a.text }}</div>
+    <div class="a">{{ a.answer }}</div>
+    <div class="meta">
+      <span>{{ a.answered_at|timeago }}</span>
+      <form method="post" action="{{ url_for('like', qid=a.id) }}" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="like-btn {% if a.id in liked %}liked{% endif %}" type="submit">♥ Нравится</button>
+      </form>
+      {% if me and u.id == me.id %}
+      <form method="post" action="{{ url_for('delete_q', qid=a.id) }}" style="display:inline" onsubmit="return confirm('Удалить этот ответ?')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="like-btn" type="submit">Удалить</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <div class="card"><p class="muted">{{ u.name }} пока не ответил ни на один вопрос. Задайте первый!</p></div>
+  {% endfor %}
+{% endif %}
+{% endblock %}

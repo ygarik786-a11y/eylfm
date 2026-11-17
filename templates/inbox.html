@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="font-size:15px;color:#2e6da4;margin-bottom:10px;">Мои вопросы — на которые нужно ответить</h2>
+{% for q in qs %}
+<div class="qitem">
+  <div class="qtext">{{ q.text }}</div>
+  <div class="muted">от {% if q.is_anon %}Анонима{% elif q.from_username %}<a href="{{ url_for('profile', username=q.from_username) }}">{{ q.from_name }}</a>{% else %}Анонима{% endif %} · {{ q.created_at|timeago }}</div>
+  <form method="post" action="{{ url_for('answer', qid=q.id) }}" style="margin-top:8px">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <textarea name="answer" maxlength="2000" placeholder="Ваш ответ..." required></textarea>
+    <div style="margin-top:6px">
+      <button class="btn" type="submit">Ответить</button>
+    </div>
+  </form>
+  <form method="post" action="{{ url_for('delete_q', qid=q.id) }}" style="margin-top:6px" onsubmit="return confirm('Удалить этот вопрос без ответа?')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="like-btn" type="submit">Удалить вопрос</button>
+  </form>
+</div>
+{% else %}
+<div class="card"><p class="muted">Новых вопросов нет. Когда вам зададут вопрос, он появится здесь.</p></div>
+{% endfor %}
+{% endblock %}

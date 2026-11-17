@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:480px">
+  <h2>Редактирование профиля</h2>
+  <form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Имя</label>
+    <input type="text" name="name" value="{{ me.name }}" required maxlength="50">
+    <label>О себе</label>
+    <textarea name="bio" maxlength="160" placeholder="Расскажите о себе...">{{ me.bio }}</textarea>
+    <label>Город</label>
+    <input type="text" name="city" value="{{ me.city }}" maxlength="50" placeholder="Например, Днепр">
+    <label>Фото профиля (PNG, JPG, GIF, до 2 МБ)</label>
+    <input type="file" name="avatar" accept="image/png,image/jpeg,image/gif">
+    {% if me.avatar %}<div class="muted" style="margin-top:4px">Сейчас: <img class="avatar-sm" src="{{ url_for('avatar_file', fn=me.avatar) }}"></div>{% endif %}
+    <div style="margin-top:12px"><button class="btn" type="submit">Сохранить</button></div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if page_title %}{{ page_title }} — {% endif %}E.Y.L FM</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="topbar"><div class="topbar-in">
+  <a class="logo" href="{{ url_for('index') }}">E.Y.L<span class="logo-fm">FM</span></a>
+  <div class="topnav">
+    <a href="{{ url_for('index') }}">Главная</a>
+    {% if me %}
+    <a href="{{ url_for('my_page') }}">Моя страница</a>
+    <a href="{{ url_for('inbox') }}">Вопросы</a>
+    <a href="{{ url_for('friends') }}">Друзья</a>
+    <a href="{{ url_for('liked') }}">Понравившиеся</a>
+    <a href="{{ url_for('gifts_page') }}">Подарки</a>
+    <a href="{{ url_for('notifications') }}">Уведомления{% if unread %} <span class="badge">{{ unread }}</span>{% endif %}</a>
+    {% endif %}
+    <a href="{{ url_for('search') }}">Поиск</a>
+    {% if me %}<a href="{{ url_for('settings') }}">Настройки</a>{% endif %}
+  </div>
+  <div class="topuser">
+    {% if me %}Привет, <a href="{{ url_for('my_page') }}">{{ me.name }}</a> · <a href="{{ url_for('logout') }}">Выйти</a>
+    {% else %}<a href="{{ url_for('login') }}">Войти</a> · <a href="{{ url_for('register') }}">Регистрация</a>{% endif %}
+  </div>
+</div></div>
+<div class="wrap">
+  <div class="main">
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+  <div class="side">
+    {% if me %}
+    <div class="card">
+      <div class="person">
+        {% if me.avatar %}<img class="avatar-sm" src="{{ url_for('avatar_file', fn=me.avatar) }}">{% else %}<span class="avatar-ph-sm">{{ me.name[0] }}</span>{% endif %}
+        <div><div class="nm"><a href="{{ url_for('my_page') }}">{{ me.name }}</a></div>
+        <div class="sub">@{{ me.username }}{% if me.city %} · {{ me.city }}{% endif %}</div></div>
+      </div>
+      <div class="hr"></div>
+      <a class="btn btn-small" href="{{ url_for('inbox') }}">Мои вопросы</a>
+      <a class="btn btn-small btn-gray" href="{{ url_for('edit_profile') }}">Редактировать профиль</a>
+    </div>
+    {% else %}
+    <div class="card">
+      <h2>E.Y.L FM</h2>
+      <p>Задавай вопросы, получай ответы. Анонимно или от своего имени — как захочешь.</p>
+      <div class="hr"></div>
+      <a class="btn" href="{{ url_for('register') }}">Зарегистрироваться</a>
+      <a class="btn btn-gray" href="{{ url_for('login') }}">Войти</a>
+    </div>
+    {% endif %}
+    {% if people %}
+    <div class="card">
+      <h3>Новые люди</h3>
+      {% for p in people %}
+      <div class="person">
+        {% if p.avatar %}<img class="avatar-sm" src="{{ url_for('avatar_file', fn=p.avatar) }}">{% else %}<span class="avatar-ph-sm">{{ p.name[0] }}</span>{% endif %}
+        <div><div class="nm"><a href="{{ url_for('profile', username=p.username) }}">{{ p.name }}</a></div>
+        <div class="sub">@{{ p.username }}</div></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="card">
+      <h3>О сайте</h3>
+      <p class="muted">E.Y.L FM — соцсеть вопросов и ответов. Всего пользователей: {{ all_users_count }}.</p>
+      <p class="muted">Задавайте вопросы друзьям — анонимно или открыто. Отвечайте, ставьте лайки, дарите подарки.</p>
+    </div>
+  </div>
+</div>
+<div class="footer">E.Y.L FM © 2026 · Сделано с любовью · <a href="{{ url_for('index') }}">Главная</a> · <a href="{{ url_for('search') }}">Поиск людей</a></div>
+</body>
+</html>
