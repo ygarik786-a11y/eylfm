@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% if page_title %}{{ page_title }} — {% endif %}E.Y.L FM</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
 </head>
 <body>
 <div class="topbar"><div class="topbar-in">
-  <a class="logo" href="{{ url_for('index') }}">E.Y.L<span class="logo-fm">FM</span></a>
+  <a class="logo" href="{{ url_for('index') }}"><span class="logo-swan">🦢</span><span class="logo-name">E.Y.L</span><span class="logo-fm">FM</span></a>
   <div class="topnav">
     <a href="{{ url_for('index') }}">Главная</a>
     {% if me %}
@@ -48,7 +48,7 @@
     </div>
     {% else %}
     <div class="card">
-      <h2>E.Y.L FM</h2>
+      <h2>🦢 E.Y.L FM</h2>
       <p>Задавай вопросы, получай ответы. Анонимно или от своего имени — как захочешь.</p>
       <div class="hr"></div>
       <a class="btn" href="{{ url_for('register') }}">Зарегистрироваться</a>

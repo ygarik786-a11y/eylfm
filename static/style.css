@@ -5,17 +5,18 @@ a { color: #2e6da4; text-decoration: none; }
 a:hover { text-decoration: underline; }
 img { max-width: 100%; }
 
-/* --- верхняя синяя панель --- */
-.topbar { background: #2e6da4; height: 50px; }
-.topbar-in { width: 940px; max-width: 100%; margin: 0 auto; display: flex; align-items: center; height: 50px; padding: 0 10px; }
-.logo { color: #fff; font-size: 26px; font-weight: bold; letter-spacing: -1px; white-space: nowrap; }
+/* --- верхняя панель: ярко, как в ВК (2026-11-21, слово Erik) --- */
+.topbar { background: linear-gradient(90deg, #0077ff, #2a6fd6 55%, #4a76a8); height: 54px; box-shadow: 0 2px 12px rgba(0, 60, 140, .35); position: relative; z-index: 10; }
+.topbar-in { width: 940px; max-width: 100%; margin: 0 auto; display: flex; align-items: center; height: 54px; padding: 0 10px; }
+.logo { color: #fff; font-size: 25px; font-weight: bold; letter-spacing: -.5px; white-space: nowrap; display: inline-flex; align-items: center; gap: 9px; text-shadow: 0 1px 3px rgba(0, 40, 90, .35); }
 .logo:hover { text-decoration: none; }
-.logo-fm { background: #fff; color: #2e6da4; font-size: 13px; padding: 2px 6px; border-radius: 3px; vertical-align: middle; margin-left: 4px; letter-spacing: 0; }
+.logo-swan { background: #fff; border-radius: 12px; width: 37px; height: 37px; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; box-shadow: 0 2px 9px rgba(0, 40, 90, .4); text-shadow: none; }
+.logo-fm { background: linear-gradient(135deg, #ffd76e, #f5a623); color: #4a2f00; font-size: 13px; font-weight: 800; padding: 3px 10px; border-radius: 999px; margin-left: 1px; letter-spacing: .6px; box-shadow: 0 2px 9px rgba(245, 166, 35, .5); text-shadow: none; }
 .topnav { margin-left: 25px; display: flex; gap: 2px; flex-wrap: wrap; }
-.topnav a { color: #dcebf7; font-size: 13px; padding: 6px 9px; border-radius: 3px; }
-.topnav a:hover, .topnav a.active { background: #245a8a; color: #fff; text-decoration: none; }
+.topnav a { color: #eaf3ff; font-size: 13px; padding: 6px 9px; border-radius: 6px; }
+.topnav a:hover, .topnav a.active { background: rgba(255, 255, 255, .2); color: #fff; text-decoration: none; }
 .badge { background: #e74c3c; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 5px; border-radius: 8px; vertical-align: super; }
-.topuser { margin-left: auto; color: #dcebf7; font-size: 13px; white-space: nowrap; }
+.topuser { margin-left: auto; color: #eaf3ff; font-size: 13px; white-space: nowrap; }
 .topuser a { color: #fff; font-weight: bold; }
 
 /* --- компоновка --- */
