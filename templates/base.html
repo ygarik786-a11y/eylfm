@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>try{if(localStorage.getItem('eylfm-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}</script>
 <title>{% if page_title %}{{ page_title }} — {% endif %}E.Y.L FM</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=7">
 </head>
 <body>
 <div class="topbar"><div class="topbar-in">
@@ -58,6 +58,21 @@
       <div class="hr"></div>
       <a class="btn" href="{{ url_for('register') }}">Зарегистрироваться</a>
       <a class="btn btn-gray" href="{{ url_for('login') }}">Войти</a>
+    </div>
+    {% endif %}
+    {% if top %}
+    <div class="card topweek">
+      <h3>🏆 Лучшие на неделе</h3>
+      {% for p in top %}
+      <div class="person">
+        <span class="medal">{{ ['🥇','🥈','🥉'][loop.index0] }}</span>
+        {% if p.avatar %}<img class="avatar-sm" src="{{ url_for('avatar_file', fn=p.avatar) }}">{% else %}<span class="avatar-ph-sm">{{ p.name[0] }}</span>{% endif %}
+        <div style="flex:1"><div class="nm"><a href="{{ url_for('profile', username=p.username) }}">{{ p.name }}</a></div>
+        <div class="sub">@{{ p.username }}</div></div>
+        <span class="topcnt">❤️ {{ p.cnt }}</span>
+      </div>
+      {% endfor %}
+      {% if not top_week %}<p class="muted" style="margin-top:6px">На этой неделе лайков пока не было — это лучшие за всё время. Поставь лайк другу и встряхни список!</p>{% endif %}
     </div>
     {% endif %}
     {% if people %}

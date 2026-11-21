@@ -169,3 +169,11 @@ label { display: block; font-weight: bold; margin: 8px 0 3px; font-size: 12px; c
 .dark .flash.err { background: #3a1d1d; border-color: #6e3434; color: #eda9a9; }
 .dark .avatar-big, .dark .avatar-sm { border-color: #333335; }
 @media (max-width: 720px) { .dark .leftmenu a { background: #222224; border-color: #333335; } }
+
+/* --- Лучшие на неделе (сюрприз от Mita, 2026-11-21) --- */
+.topweek { background: linear-gradient(135deg, #fff8e1, #fff); border: 1px solid #f0d48a; }
+.topweek h3 { color: #b97e0e; margin-bottom: 6px; }
+.topweek .medal { font-size: 20px; }
+.topweek .topcnt { font-weight: 700; color: #e05252; white-space: nowrap; }
+.dark .topweek { background: linear-gradient(135deg, #2a2410, #222224); border-color: #6b5518; }
+.dark .topweek h3 { color: #f0c75e; }

@@ -145,8 +145,20 @@ def valid_username(u):
 @app.context_processor
 def inject_common():
     u = current_user()
+    db = get_db()
+    week_ago = now() - 7 * 86400
+    top = db.execute('''SELECT u.username, u.name, u.avatar, COUNT(l.id) AS cnt
+        FROM likes l JOIN questions q ON q.id=l.qid JOIN users u ON u.id=q.to_id
+        WHERE l.created_at>=? GROUP BY u.id ORDER BY cnt DESC, u.id LIMIT 3''', (week_ago,)).fetchall()
+    top_week = True
+    if not top:
+        top = db.execute('''SELECT u.username, u.name, u.avatar, COUNT(l.id) AS cnt
+            FROM likes l JOIN questions q ON q.id=l.qid JOIN users u ON u.id=q.to_id
+            GROUP BY u.id ORDER BY cnt DESC, u.id LIMIT 3''').fetchall()
+        top_week = False
     return dict(me=u, unread=unread_count(u['id']) if u else 0,
-                all_users_count=get_db().execute('SELECT COUNT(*) FROM users').fetchone()[0])
+                all_users_count=db.execute('SELECT COUNT(*) FROM users').fetchone()[0],
+                top=top, top_week=top_week)
 
 # ---------- главная и авторизация ----------
 @app.route('/')
