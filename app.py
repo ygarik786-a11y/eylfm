@@ -156,7 +156,23 @@ def index():
     if me:
         liked = {r[0] for r in db.execute('SELECT qid FROM likes WHERE user_id=?', (me['id'],)).fetchall()}
     people = db.execute('SELECT * FROM users ORDER BY created_at DESC LIMIT 6').fetchall()
-    return render_template('index.html', feed=feed, liked=liked, people=people)
+    import datetime as _dt
+    _dq = ['Какой фильм ты можешь пересматривать вечно? 🎬',
+           'Какая песня у тебя сейчас на повторе? 🎵',
+           'Если бы у тебя была суперспособность — какая? ✨',
+           'Твой любимый вкус мороженого? 🍦',
+           'В каком городе ты мечтаешь побывать? 🌍',
+           'Какая игра из детства — самая любимая? 🎮',
+           'Кофе или чай? ☕',
+           'Какой подарок ты запомнил на всю жизнь? 🎁',
+           'Если бы животные умели говорить — с кем бы ты поговорил первым? 🐶',
+           'Твоё идеальное воскресенье — какое оно? 🌤️',
+           'Какая еда — самая вкусная на свете? 🍕',
+           'Что ты умеешь делать лучше всех? 😎',
+           'Какой праздник ждёшь больше всего в году? 🎄',
+           'Если бы ночью совсем не хотелось спать — чем бы ты занялся? 🌙']
+    day_q = _dq[_dt.date.today().timetuple().tm_yday % len(_dq)]
+    return render_template('index.html', feed=feed, liked=liked, people=people, day_q=day_q)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

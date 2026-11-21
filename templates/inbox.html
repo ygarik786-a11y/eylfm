@@ -4,7 +4,7 @@
 {% for q in qs %}
 <div class="qitem">
   <div class="qtext">{{ q.text }}</div>
-  <div class="muted">от {% if q.is_anon %}Анонима{% elif q.from_username %}<a href="{{ url_for('profile', username=q.from_username) }}">{{ q.from_name }}</a>{% else %}Анонима{% endif %} · {{ q.created_at|timeago }}</div>
+  <div class="muted">от {% if q.is_anon %}🎭 Анонима{% elif q.from_username %}<a href="{{ url_for('profile', username=q.from_username) }}">{{ q.from_name }}</a>{% else %}🎭 Анонима{% endif %} · {{ q.created_at|timeago }}</div>
   <form method="post" action="{{ url_for('answer', qid=q.id) }}" style="margin-top:8px">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <textarea name="answer" maxlength="2000" placeholder="Ваш ответ..." required></textarea>

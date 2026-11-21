@@ -69,7 +69,7 @@ label { display: block; font-weight: bold; margin: 8px 0 3px; font-size: 12px; c
 .ask-box textarea { margin-bottom: 6px; }
 
 /* --- лента ответов --- */
-.answer { border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; background: #fff; }
+.answer { border: 1px solid #dce1e6; padding: 14px; margin-bottom: 12px; background: #fff; border-radius: 12px; box-shadow: 0 1px 2px rgba(0, 0, 0, .05); }
 .answer .q { font-weight: bold; font-size: 14px; color: #222; margin-bottom: 4px; }
 .answer .q .who { color: #888; font-weight: normal; font-size: 12px; }
 .answer .a { margin: 6px 0; white-space: pre-wrap; word-wrap: break-word; }
@@ -101,8 +101,17 @@ label { display: block; font-weight: bold; margin: 8px 0 3px; font-size: 12px; c
 .notif .t { color: #888; font-size: 12px; font-weight: normal; }
 
 /* --- прочее --- */
-.hero { text-align: center; padding: 25px 10px; }
-.hero h1 { font-size: 26px; color: #2e6da4; margin-bottom: 8px; }
+.hero { text-align: center; padding: 28px 12px; background: linear-gradient(135deg, #0077ff, #4a76a8); border: none; color: #fff; }
+.hero h1 { font-size: 27px; color: #fff; margin-bottom: 8px; text-shadow: 0 2px 6px rgba(0, 40, 90, .3); }
+.hero p { color: #eaf3ff; }
+.hero .hr { border-top-color: rgba(255, 255, 255, .35); }
+.hero .btn { background: linear-gradient(135deg, #ffd76e, #f5a623); color: #4a2f00; font-weight: bold; box-shadow: 0 3px 10px rgba(0, 40, 90, .3); }
+.hero .btn:hover { background: linear-gradient(135deg, #ffd76e, #f5a623); color: #4a2f00; filter: brightness(1.06); }
+/* Вопрос дня (фишка от Mita, 2026-11-21) */
+.dayq { background: linear-gradient(135deg, #fff8e1, #fff); border: 1px solid #f0d48a; }
+.dayq-title { font-weight: 800; color: #b97e0e; font-size: 13px; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 5px; }
+.dayq-text { font-size: 17px; font-weight: 700; color: #333; margin-bottom: 4px; }
+.dayq-hint { color: #999; font-size: 12px; }
 .hero p { color: #555; font-size: 14px; }
 .footer { text-align: center; color: #aaa; font-size: 12px; padding: 20px 0; border-top: 1px solid #eee; margin-top: 10px; }
 .two-col { display: flex; gap: 20px; }

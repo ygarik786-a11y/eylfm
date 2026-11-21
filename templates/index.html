@@ -2,13 +2,20 @@
 {% block content %}
 {% if not me %}
 <div class="card hero">
-  <h1>E.Y.L FM — задай вопрос!</h1>
+  <h1>🦢 E.Y.L FM — задай вопрос!</h1>
   <p>Соцсеть вопросов и ответов в духе старого доброго ASK.fm.<br>Регистрируйся, спрашивай друзей и отвечай на вопросы.</p>
   <div class="hr"></div>
   <a class="btn" href="{{ url_for('register') }}">Зарегистрироваться бесплатно</a>
 </div>
 {% endif %}
-<h2 style="font-size:15px;color:#2e6da4;margin-bottom:10px;">{{ page_title or 'Лента ответов' }}</h2>
+{% if day_q %}
+<div class="card dayq">
+  <div class="dayq-title">❓ Вопрос дня</div>
+  <div class="dayq-text">{{ day_q }}</div>
+  <div class="dayq-hint">Задай его кому-нибудь из друзей — или загляни в «Поиск» и найди, кого спросить!</div>
+</div>
+{% endif %}
+<h2 style="font-size:15px;color:#0077ff;margin-bottom:10px;">{{ page_title or 'Лента ответов' }}</h2>
 {% for a in feed %}
 <div class="answer">
   <div class="q">{{ a.text }}
