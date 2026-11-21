@@ -112,7 +112,7 @@ label { display: block; font-weight: bold; margin: 8px 0 3px; font-size: 12px; c
 .dayq-title { font-weight: 800; color: #b97e0e; font-size: 13px; letter-spacing: .4px; text-transform: uppercase; margin-bottom: 5px; }
 .dayq-text { font-size: 17px; font-weight: 700; color: #333; margin-bottom: 4px; }
 .dayq-hint { color: #999; font-size: 12px; }
-.hero p { color: #555; font-size: 14px; }
+.hero p { font-size: 14px; }
 .footer { text-align: center; color: #aaa; font-size: 12px; padding: 20px 0; border-top: 1px solid #eee; margin-top: 10px; }
 .two-col { display: flex; gap: 20px; }
 .two-col > div { flex: 1; }
@@ -129,3 +129,41 @@ label { display: block; font-weight: bold; margin: 8px 0 3px; font-size: 12px; c
   .avatar-big, .avatar-ph { width: 90px; height: 90px; font-size: 40px; }
   .two-col { flex-direction: column; }
 }
+
+/* --- кнопка темы в шапке --- */
+.theme-btn { background: rgba(255, 255, 255, .18); border: none; border-radius: 8px; font-size: 16px; padding: 4px 10px; cursor: pointer; margin-right: 10px; vertical-align: middle; }
+.theme-btn:hover { background: rgba(255, 255, 255, .3); }
+
+/* --- тёмная тема (слово Erik, 2026-11-21) --- */
+.dark body { background: #141416; color: #e1e3e6; }
+.dark a { color: #6ea8ff; }
+.dark .card { background: #222224; border-color: #333335; box-shadow: none; }
+.dark .card h2 { color: #6ea8ff; border-bottom-color: #333335; }
+.dark .muted, .dark .person .sub, .dark .profile-nick, .dark .answer .meta, .dark .answer .q .who, .dark .notif .t, .dark .gift .gd, .dark .dayq-hint { color: #9a9fa8; }
+.dark .hr { border-top-color: #333335; }
+.dark input[type=text], .dark input[type=password], .dark textarea, .dark select { background: #2c2c2e; border-color: #3d3d40; color: #f0f0f0; }
+.dark label { color: #c9ccd1; }
+.dark .btn-gray { background: #2c2c2e; color: #e1e3e6; border-color: #3d3d40; }
+.dark .btn-gray:hover { background: #363638; color: #fff; }
+.dark .tabs { border-bottom-color: #333335; }
+.dark .tabs a { color: #c9ccd1; }
+.dark .tabs a.active { color: #6ea8ff; border-color: #333335; background: #222224; }
+.dark .ask-box { background: #1d1d1f; border-color: #333335; }
+.dark .answer { background: #222224; border-color: #333335; box-shadow: none; }
+.dark .answer .q { color: #f2f3f5; }
+.dark .like-btn { color: #9a9fa8; }
+.dark .qitem { border-color: #333335; background: #222224; }
+.dark .person { border-bottom-color: #2c2c2e; }
+.dark .notif { border-bottom-color: #2c2c2e; }
+.dark .gift { background: #222224; border-color: #333335; }
+.dark .gift:hover { border-color: #6ea8ff; }
+.dark .gift-sel { background: #1d2f45; border-color: #6ea8ff; }
+.dark .leftmenu a { color: #dbe4ee; }
+.dark .leftmenu a:hover { background: #26282c; }
+.dark .dayq { background: linear-gradient(135deg, #2a2410, #222224); border-color: #6b5518; }
+.dark .dayq-text { color: #f2f3f5; }
+.dark .footer { color: #777; border-top-color: #26282c; }
+.dark .flash.ok { background: #17301a; border-color: #2e5b33; color: #9ed3a2; }
+.dark .flash.err { background: #3a1d1d; border-color: #6e3434; color: #eda9a9; }
+.dark .avatar-big, .dark .avatar-sm { border-color: #333335; }
+@media (max-width: 720px) { .dark .leftmenu a { background: #222224; border-color: #333335; } }
