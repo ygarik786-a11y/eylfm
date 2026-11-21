@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="topbar"><div class="topbar-in">
-  <a class="logo" href="{{ url_for('index') }}"><span class="logo-swan"><img src="{{ url_for('static', filename='swan.svg') }}" alt="E.Y.L FM"></span><span class="logo-name">E.Y.L</span><span class="logo-fm">FM</span></a>
+  <a class="logo" href="{{ url_for('index') }}"><span class="logo-swan"><img src="{{ url_for('static', filename='swan2.svg') }}" alt="E.Y.L FM"></span><span class="logo-name">E.Y.L</span><span class="logo-fm">FM</span></a>
   <div class="topuser">
     <button class="theme-btn" id="themeBtn" title="Тёмная тема">🌙</button>
     {% if me %}Привет, <a href="{{ url_for('my_page') }}">{{ me.name }}</a> · <a href="{{ url_for('logout') }}">Выйти</a>
