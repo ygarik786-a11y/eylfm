@@ -4,30 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% if page_title %}{{ page_title }} — {% endif %}E.Y.L FM</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
 </head>
 <body>
 <div class="topbar"><div class="topbar-in">
   <a class="logo" href="{{ url_for('index') }}"><span class="logo-swan">🦢</span><span class="logo-name">E.Y.L</span><span class="logo-fm">FM</span></a>
-  <div class="topnav">
-    <a href="{{ url_for('index') }}">Главная</a>
-    {% if me %}
-    <a href="{{ url_for('my_page') }}">Моя страница</a>
-    <a href="{{ url_for('inbox') }}">Вопросы</a>
-    <a href="{{ url_for('friends') }}">Друзья</a>
-    <a href="{{ url_for('liked') }}">Понравившиеся</a>
-    <a href="{{ url_for('gifts_page') }}">Подарки</a>
-    <a href="{{ url_for('notifications') }}">Уведомления{% if unread %} <span class="badge">{{ unread }}</span>{% endif %}</a>
-    {% endif %}
-    <a href="{{ url_for('search') }}">Поиск</a>
-    {% if me %}<a href="{{ url_for('settings') }}">Настройки</a>{% endif %}
-  </div>
   <div class="topuser">
     {% if me %}Привет, <a href="{{ url_for('my_page') }}">{{ me.name }}</a> · <a href="{{ url_for('logout') }}">Выйти</a>
     {% else %}<a href="{{ url_for('login') }}">Войти</a> · <a href="{{ url_for('register') }}">Регистрация</a>{% endif %}
   </div>
 </div></div>
 <div class="wrap">
+  <nav class="leftmenu">
+    <a href="{{ url_for('index') }}"><span class="mi-ico">🏠</span>Главная</a>
+    {% if me %}
+    <a href="{{ url_for('my_page') }}"><span class="mi-ico">👤</span>Страница</a>
+    <a href="{{ url_for('inbox') }}"><span class="mi-ico">❓</span>Вопросы</a>
+    <a href="{{ url_for('friends') }}"><span class="mi-ico">👥</span>Друзья</a>
+    <a href="{{ url_for('liked') }}"><span class="mi-ico">❤️</span>Понравившиеся</a>
+    <a href="{{ url_for('gifts_page') }}"><span class="mi-ico">🎁</span>Подарки</a>
+    <a href="{{ url_for('notifications') }}"><span class="mi-ico">🔔</span>Уведомления{% if unread %} <span class="badge">{{ unread }}</span>{% endif %}</a>
+    {% endif %}
+    <a href="{{ url_for('search') }}"><span class="mi-ico">🔍</span>Поиск</a>
+    {% if me %}
+    <a href="{{ url_for('settings') }}"><span class="mi-ico">⚙️</span>Настройки</a>
+    {% endif %}
+  </nav>
   <div class="main">
     {% with msgs = get_flashed_messages(with_categories=true) %}
       {% for cat, msg in msgs %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
