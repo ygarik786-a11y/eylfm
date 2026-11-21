@@ -27,7 +27,7 @@
 <div class="card">
   <h2>Мои полученные подарки</h2>
   {% for g in mine %}
-  <div class="qitem"><span style="font-size:28px">{{ g.emoji }}</span> <b>{{ g.gname }}</b> — от <a href="{{ url_for('profile', username=g.from_username) }}">{{ g.from_name }}</a>
+  <div class="qitem"><span style="font-size:28px">{{ g.emoji }}</span> <b>{{ g.gname }}</b> — от {% if g.from_username %}<a href="{{ url_for('profile', username=g.from_username) }}">{{ g.from_name }}</a>{% else %}🎭 Анонима{% endif %}
     {% if g.message %}<div>«{{ g.message }}»</div>{% endif %}
     <div class="muted">{{ g.created_at|timeago }}</div></div>
   {% else %}

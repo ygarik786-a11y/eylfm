@@ -76,6 +76,14 @@ def init_db():
     if db.execute('SELECT COUNT(*) FROM gifts').fetchone()[0] == 0:
         db.executemany('INSERT INTO gifts(name, emoji, descr) VALUES(?,?,?)',
                        [(n, e, d) for (e, n, d) in GIFTS])
+    # миграции для админки (2026-11-21): бан и анонимные подарки
+    ucols = [r[1] for r in db.execute('PRAGMA table_info(users)').fetchall()]
+    if 'is_banned' not in ucols:
+        db.execute('ALTER TABLE users ADD COLUMN is_banned INTEGER DEFAULT 0')
+    gcols = [r[1] for r in db.execute('PRAGMA table_info(user_gifts)').fetchall()]
+    if 'is_anon' not in gcols:
+        db.execute('ALTER TABLE user_gifts ADD COLUMN is_anon INTEGER DEFAULT 0')
+    db.execute("UPDATE users SET is_admin=1 WHERE username='erik'")
     db.commit(); db.close()
 
 init_db()
@@ -209,10 +217,13 @@ def login():
         username = (request.form.get('username') or '').strip().lower()
         pw = request.form.get('password') or ''
         u = get_db().execute('SELECT * FROM users WHERE username=?', (username,)).fetchone()
-        if u and check_password_hash(u['password_hash'], pw):
+        if u and u['is_banned']:
+            flash('Этот аккаунт заблокирован администратором.', 'err')
+        elif u and check_password_hash(u['password_hash'], pw):
             session['user_id'] = u['id']
             return redirect(url_for('index'))
-        flash('Неверный ник или пароль.', 'err')
+        else:
+            flash('Неверный ник или пароль.', 'err')
     return render_template('auth.html', mode='login')
 
 @app.route('/logout')
@@ -239,7 +250,9 @@ def profile(username):
     if me:
         liked = {r[0] for r in db.execute('SELECT qid FROM likes WHERE user_id=?', (me['id'],)).fetchall()}
     is_following = bool(me and db.execute('SELECT id FROM follows WHERE follower_id=? AND followed_id=?', (me['id'], u['id'])).fetchone())
-    my_gifts = db.execute('''SELECT ug.*, g.emoji, g.name AS gname, us.username AS from_username, us.name AS from_name
+    my_gifts = db.execute('''SELECT ug.*, g.emoji, g.name AS gname,
+        CASE WHEN ug.is_anon=1 THEN '' ELSE us.username END AS from_username,
+        CASE WHEN ug.is_anon=1 THEN 'Аноним' ELSE us.name END AS from_name
         FROM user_gifts ug JOIN gifts g ON g.id=ug.gift_id JOIN users us ON us.id=ug.from_id
         WHERE ug.to_id=? ORDER BY ug.created_at DESC LIMIT 30''', (u['id'],)).fetchall()
     return render_template('profile.html', u=u, tab=tab, answers=answers, stats=stats,
@@ -387,7 +400,9 @@ def gifts_page():
     me = current_user()
     db = get_db()
     catalog = db.execute('SELECT * FROM gifts ORDER BY id').fetchall()
-    mine = db.execute('''SELECT ug.*, g.emoji, g.name AS gname, us.username AS from_username, us.name AS from_name
+    mine = db.execute('''SELECT ug.*, g.emoji, g.name AS gname,
+        CASE WHEN ug.is_anon=1 THEN '' ELSE us.username END AS from_username,
+        CASE WHEN ug.is_anon=1 THEN 'Аноним' ELSE us.name END AS from_name
         FROM user_gifts ug JOIN gifts g ON g.id=ug.gift_id JOIN users us ON us.id=ug.from_id
         WHERE ug.to_id=? ORDER BY ug.created_at DESC LIMIT 30''', (me['id'],)).fetchall()
     users = db.execute('SELECT username, name FROM users WHERE id!=? ORDER BY name LIMIT 100', (me['id'],)).fetchall()
@@ -411,6 +426,120 @@ def send_gift():
     notify(u['id'], 'gift', f"{me['name']} подарил вам «{g['name']}» {g['emoji']}", url_for('profile', username=u['username']) + '?tab=gifts')
     flash(f"Подарок «{g['name']}» отправлен {u['name']}!", 'ok')
     return redirect(url_for('gifts_page'))
+
+# ---------- админка создателя (2026-11-21, слово Erik) ----------
+def admin_required(fn):
+    from functools import wraps
+    @wraps(fn)
+    def w(*a, **kw):
+        u = current_user()
+        if not u or not u['is_admin']:
+            abort(404)
+        return fn(*a, **kw)
+    return w
+
+@app.route('/admin')
+@admin_required
+def admin_panel():
+    db = get_db()
+    stats = {
+        'users': db.execute('SELECT COUNT(*) FROM users').fetchone()[0],
+        'questions': db.execute('SELECT COUNT(*) FROM questions').fetchone()[0],
+        'answers': db.execute('SELECT COUNT(*) FROM questions WHERE answer IS NOT NULL').fetchone()[0],
+        'gifts': db.execute('SELECT COUNT(*) FROM user_gifts').fetchone()[0],
+        'likes': db.execute('SELECT COUNT(*) FROM likes').fetchone()[0],
+    }
+    users = db.execute('SELECT * FROM users ORDER BY id').fetchall()
+    catalog = db.execute('SELECT * FROM gifts ORDER BY id').fetchall()
+    recent_answers = db.execute('''SELECT q.*, tu.username AS to_username, tu.name AS to_name
+        FROM questions q JOIN users tu ON tu.id=q.to_id
+        WHERE q.answer IS NOT NULL ORDER BY q.answered_at DESC LIMIT 15''').fetchall()
+    recent_questions = db.execute('''SELECT q.*, tu.username AS to_username, tu.name AS to_name
+        FROM questions q JOIN users tu ON tu.id=q.to_id
+        WHERE q.answer IS NULL ORDER BY q.created_at DESC LIMIT 15''').fetchall()
+    return render_template('admin.html', stats=stats, users=users, catalog=catalog,
+                           recent_answers=recent_answers, recent_questions=recent_questions)
+
+@app.route('/admin/gift_add', methods=['POST'])
+@admin_required
+def admin_gift_add():
+    emoji = (request.form.get('emoji') or '').strip()[:8]
+    name = (request.form.get('name') or '').strip()[:40]
+    descr = (request.form.get('descr') or '').strip()[:80]
+    if emoji and name:
+        db = get_db()
+        db.execute('INSERT INTO gifts(name, emoji, descr) VALUES(?,?,?)', (name, emoji, descr))
+        db.commit()
+        flash(f'Подарок «{name}» добавлен в каталог!', 'ok')
+    else:
+        flash('Укажите эмодзи и название подарка.', 'err')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/gift_del/<int:gid>', methods=['POST'])
+@admin_required
+def admin_gift_del(gid):
+    db = get_db()
+    db.execute('DELETE FROM user_gifts WHERE gift_id=?', (gid,))
+    db.execute('DELETE FROM gifts WHERE id=?', (gid,))
+    db.commit()
+    flash('Подарок удалён из каталога.', 'ok')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/gift_send', methods=['POST'])
+@admin_required
+def admin_gift_send():
+    me = current_user()
+    db = get_db()
+    to_username = (request.form.get('to') or '').strip().lower()
+    gift_id = request.form.get('gift_id', type=int)
+    message = (request.form.get('message') or '').strip()[:140]
+    anon = 1 if request.form.get('anon') else 0
+    u = db.execute('SELECT * FROM users WHERE username=?', (to_username,)).fetchone()
+    g = db.execute('SELECT * FROM gifts WHERE id=?', (gift_id,)).fetchone()
+    if not u or not g:
+        flash('Выберите получателя и подарок.', 'err')
+        return redirect(url_for('admin_panel'))
+    db.execute('INSERT INTO user_gifts(from_id, to_id, gift_id, message, is_anon, created_at) VALUES(?,?,?,?,?,?)',
+               (me['id'], u['id'], gift_id, message, anon, now()))
+    db.commit()
+    who = '🎭 Аноним' if anon else me['name']
+    notify(u['id'], 'gift', f"{who} подарил вам «{g['name']}» {g['emoji']}", url_for('profile', username=u['username']) + '?tab=gifts')
+    flash(f"Подарок «{g['name']}» отправлен {u['name']}" + (' — анонимно 🎭' if anon else '') + '!', 'ok')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/user_ban/<int:uid>', methods=['POST'])
+@admin_required
+def admin_user_ban(uid):
+    me = current_user()
+    db = get_db()
+    u = db.execute('SELECT * FROM users WHERE id=?', (uid,)).fetchone()
+    if u and u['id'] != me['id']:
+        db.execute('UPDATE users SET is_banned=? WHERE id=?', (0 if u['is_banned'] else 1, uid))
+        db.commit()
+        flash((f"Бан снят с {u['name']}." if u['is_banned'] else f"{u['name']} забанен."), 'ok')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/user_admin/<int:uid>', methods=['POST'])
+@admin_required
+def admin_user_admin(uid):
+    me = current_user()
+    db = get_db()
+    u = db.execute('SELECT * FROM users WHERE id=?', (uid,)).fetchone()
+    if u and u['id'] != me['id']:
+        db.execute('UPDATE users SET is_admin=? WHERE id=?', (0 if u['is_admin'] else 1, uid))
+        db.commit()
+        flash((f"Админка отозвана у {u['name']}." if u['is_admin'] else f"{u['name']} теперь тоже админ."), 'ok')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/del_q/<int:qid>', methods=['POST'])
+@admin_required
+def admin_del_q(qid):
+    db = get_db()
+    db.execute('DELETE FROM likes WHERE qid=?', (qid,))
+    db.execute('DELETE FROM questions WHERE id=?', (qid,))
+    db.commit()
+    flash('Удалено.', 'ok')
+    return redirect(url_for('admin_panel'))
 
 # ---------- уведомления, поиск, настройки ----------
 @app.route('/notifications')

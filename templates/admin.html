@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="font-size:15px;color:#2e6da4;margin-bottom:10px;">🛠 Админка создателя</h2>
+
+<div class="card">
+  <h2>📊 Статистика</h2>
+  <div class="stats">
+    <span><b>{{ stats.users }}</b><br>пользователей</span>
+    <span><b>{{ stats.questions }}</b><br>вопросов</span>
+    <span><b>{{ stats.answers }}</b><br>ответов</span>
+    <span><b>{{ stats.gifts }}</b><br>подарков дарили</span>
+    <span><b>{{ stats.likes }}</b><br>лайков</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>🎁 Отправить подарок</h2>
+  <form method="post" action="{{ url_for('admin_gift_send') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Кому</label>
+    <select name="to" required>
+      <option value="">— выберите человека —</option>
+      {% for u in users %}{% if u.id != me.id %}<option value="{{ u.username }}">{{ u.name }} (@{{ u.username }})</option>{% endif %}{% endfor %}
+    </select>
+    <label>Подарок</label>
+    <select name="gift_id" required>
+      <option value="">— выберите подарок —</option>
+      {% for g in catalog %}<option value="{{ g.id }}">{{ g.emoji }} {{ g.name }}</option>{% endfor %}
+    </select>
+    <label>Сообщение (необязательно)</label>
+    <input type="text" name="message" maxlength="140" placeholder="Например: от тайного поклонника">
+    <label style="font-weight:normal;margin-top:10px;"><input type="checkbox" name="anon" style="width:auto;"> 🎭 Отправить анонимно — получатель не узнает, что это ты</label>
+    <div style="margin-top:12px"><button class="btn" type="submit">Отправить подарок</button></div>
+  </form>
+</div>
+
+<div class="card">
+  <h2>➕ Добавить подарок в каталог</h2>
+  <form method="post" action="{{ url_for('admin_gift_add') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Эмодзи</label>
+    <input type="text" name="emoji" maxlength="8" placeholder="Например: 🍕" required>
+    <label>Название</label>
+    <input type="text" name="name" maxlength="40" placeholder="Например: Пицца" required>
+    <label>Описание</label>
+    <input type="text" name="descr" maxlength="80" placeholder="Например: Горячая и вкусная">
+    <div style="margin-top:12px"><button class="btn" type="submit">Добавить подарок</button></div>
+  </form>
+  <div class="hr"></div>
+  {% for g in catalog %}
+  <div class="person">
+    <span style="font-size:26px">{{ g.emoji }}</span>
+    <div style="flex:1"><div class="nm">{{ g.name }}</div><div class="sub">{{ g.descr }}</div></div>
+    <form method="post" action="{{ url_for('admin_gift_del', gid=g.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn-gray" type="submit">Удалить</button></form>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card">
+  <h2>👥 Пользователи</h2>
+  {% for u in users %}
+  <div class="person">
+    {% if u.avatar %}<img class="avatar-sm" src="{{ url_for('avatar_file', fn=u.avatar) }}" alt="">{% else %}<span class="avatar-ph" style="width:40px;height:40px;font-size:18px;">{{ u.name[0]|upper }}</span>{% endif %}
+    <div style="flex:1">
+      <div class="nm"><a href="{{ url_for('profile', username=u.username) }}">{{ u.name }}</a> <span class="muted">@{{ u.username }} · id {{ u.id }}</span></div>
+      <div class="sub">здесь с {{ u.created_at|timeago }}{% if u.is_admin %} · 👑 админ{% endif %}{% if u.is_banned %} · 🚫 забанен{% endif %}</div>
+    </div>
+    {% if u.id != me.id %}
+    <form method="post" action="{{ url_for('admin_user_ban', uid=u.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn-gray" type="submit">{{ 'Разбанить' if u.is_banned else 'Забанить' }}</button></form>
+    <form method="post" action="{{ url_for('admin_user_admin', uid=u.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn-gray" type="submit">{{ 'Снять админку' if u.is_admin else 'Дать админку' }}</button></form>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card">
+  <h2>🧹 Модерация — последние ответы</h2>
+  {% for q in recent_answers %}
+  <div class="qitem">
+    <div class="qtext">{{ q.text }}</div>
+    <div>{{ q.answer }}</div>
+    <div class="muted">ответ для <a href="{{ url_for('profile', username=q.to_username) }}">{{ q.to_name }}</a> · {{ q.answered_at|timeago }}</div>
+    <form method="post" action="{{ url_for('admin_del_q', qid=q.id) }}" style="margin-top:6px"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn-gray" type="submit">Удалить ответ</button></form>
+  </div>
+  {% else %}
+  <p class="muted">Ответов пока нет.</p>
+  {% endfor %}
+  <div class="hr"></div>
+  <h2>Вопросы без ответа</h2>
+  {% for q in recent_questions %}
+  <div class="qitem">
+    <div class="qtext">{{ q.text }}</div>
+    <div class="muted">для <a href="{{ url_for('profile', username=q.to_username) }}">{{ q.to_name }}</a> · {{ q.created_at|timeago }}</div>
+    <form method="post" action="{{ url_for('admin_del_q', qid=q.id) }}" style="margin-top:6px"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn-gray" type="submit">Удалить вопрос</button></form>
+  </div>
+  {% else %}
+  <p class="muted">Новых вопросов без ответа нет.</p>
+  {% endfor %}
+</div>
+{% endblock %}

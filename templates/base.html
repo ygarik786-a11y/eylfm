@@ -30,6 +30,7 @@
     <a href="{{ url_for('search') }}"><span class="mi-ico">🔍</span>Поиск</a>
     {% if me %}
     <a href="{{ url_for('settings') }}"><span class="mi-ico">⚙️</span>Настройки</a>
+    {% if me.is_admin %}<a href="{{ url_for('admin_panel') }}"><span class="mi-ico">🛠</span>Админка</a>{% endif %}
     {% endif %}
   </nav>
   <div class="main">
