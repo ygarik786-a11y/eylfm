@@ -10,7 +10,9 @@ img { max-width: 100%; }
 .topbar-in { width: 1100px; max-width: 100%; margin: 0 auto; display: flex; align-items: center; height: 54px; padding: 0 10px; }
 .logo { color: #fff; font-size: 25px; font-weight: bold; letter-spacing: -.5px; white-space: nowrap; display: inline-flex; align-items: center; gap: 9px; text-shadow: 0 1px 3px rgba(0, 40, 90, .35); }
 .logo:hover { text-decoration: none; }
-.logo-swan { background: #fff; border-radius: 12px; width: 37px; height: 37px; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; box-shadow: 0 2px 9px rgba(0, 40, 90, .4); text-shadow: none; }
+.logo-swan { border-radius: 12px; width: 37px; height: 37px; display: inline-flex; overflow: hidden; box-shadow: 0 2px 9px rgba(0, 40, 90, .4); }
+.logo-swan img { width: 37px; height: 37px; display: block; }
+.hero-swan { width: 94px; height: 94px; border-radius: 22px; box-shadow: 0 6px 18px rgba(0, 40, 90, .35); margin-bottom: 10px; }
 .logo-fm { background: linear-gradient(135deg, #ffd76e, #f5a623); color: #4a2f00; font-size: 13px; font-weight: 800; padding: 3px 10px; border-radius: 999px; margin-left: 1px; letter-spacing: .6px; box-shadow: 0 2px 9px rgba(245, 166, 35, .5); text-shadow: none; }
 .topnav { margin-left: 25px; display: flex; gap: 2px; flex-wrap: wrap; }
 .topnav a { color: #eaf3ff; font-size: 13px; padding: 6px 9px; border-radius: 6px; }

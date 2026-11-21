@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>try{if(localStorage.getItem('eylfm-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}</script>
 <title>{% if page_title %}{{ page_title }} — {% endif %}E.Y.L FM</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6">
 </head>
 <body>
 <div class="topbar"><div class="topbar-in">
-  <a class="logo" href="{{ url_for('index') }}"><span class="logo-swan">🦢</span><span class="logo-name">E.Y.L</span><span class="logo-fm">FM</span></a>
+  <a class="logo" href="{{ url_for('index') }}"><span class="logo-swan"><img src="{{ url_for('static', filename='swan.svg') }}" alt="E.Y.L FM"></span><span class="logo-name">E.Y.L</span><span class="logo-fm">FM</span></a>
   <div class="topuser">
     <button class="theme-btn" id="themeBtn" title="Тёмная тема">🌙</button>
     {% if me %}Привет, <a href="{{ url_for('my_page') }}">{{ me.name }}</a> · <a href="{{ url_for('logout') }}">Выйти</a>
@@ -52,7 +52,7 @@
     </div>
     {% else %}
     <div class="card">
-      <h2>🦢 E.Y.L FM</h2>
+      <h2>E.Y.L FM</h2>
       <p>Задавай вопросы, получай ответы. Анонимно или от своего имени — как захочешь.</p>
       <div class="hr"></div>
       <a class="btn" href="{{ url_for('register') }}">Зарегистрироваться</a>
